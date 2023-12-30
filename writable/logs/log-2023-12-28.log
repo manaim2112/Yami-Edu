@@ -1,0 +1,46 @@
+INFO - 2023-12-28 05:34:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-12-28 05:34:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-12-28 05:34:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-12-28 05:34:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-12-28 05:34:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-12-28 05:34:35 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2023-12-28 05:34:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2023-12-28 05:34:37 --> mysqli_sql_exception: Unknown column 'Hue42Jsdxuserdetails.category' in 'field list' in D:\laragon\www\sekolah\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 D:\laragon\www\sekolah\system\Database\MySQLi\Connection.php(306): mysqli->query('SELECT `Hue42Js...', 0)
+#1 D:\laragon\www\sekolah\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `Hue42Js...')
+#2 D:\laragon\www\sekolah\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `Hue42Js...')
+#3 D:\laragon\www\sekolah\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `Hue42Js...', Array, false)
+#4 D:\laragon\www\sekolah\app\Controllers\Admin.php(81): CodeIgniter\Database\BaseBuilder->get()
+#5 D:\laragon\www\sekolah\system\CodeIgniter.php(942): App\Controllers\Admin->index('admin', 'users', '', '')
+#6 D:\laragon\www\sekolah\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+#7 D:\laragon\www\sekolah\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 D:\laragon\www\sekolah\public\index.php(79): CodeIgniter\CodeIgniter->run()
+#9 {main}
+CRITICAL - 2023-12-28 05:34:37 --> Unknown column 'Hue42Jsdxuserdetails.category' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `Hue42Jsdxusers`.`id`, `Hue42Jsdxuserdetails`.`fullname`, `Hue42Jsdxusers`.`username`, `Hue42Jsdxuserdetails`.`category`
+FROM `Hue42Jsdxusers`
+LEFT JOIN `Hue42JsdxuserDetails` ON `Hue42Jsdxusers`.`id` = `Hue42Jsdxuserdetails`.`user_id`', [], false)
+ 2 APPPATH\Controllers\Admin.php(81): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\Admin->index('admin', 'users', '', '')
+ 4 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Admin))
+ 5 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ERROR - 2023-12-28 06:43:21 --> mysqli_sql_exception: Unknown table 'sekolah.hue42jsdxusersesi' in D:\laragon\www\sekolah\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 D:\laragon\www\sekolah\system\Database\MySQLi\Connection.php(306): mysqli->query('DROP TABLE `Hue...', 0)
+#1 D:\laragon\www\sekolah\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('DROP TABLE `Hue...')
+#2 D:\laragon\www\sekolah\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('DROP TABLE `Hue...')
+#3 D:\laragon\www\sekolah\system\Database\Forge.php(637): CodeIgniter\Database\BaseConnection->query('DROP TABLE `Hue...')
+#4 D:\laragon\www\sekolah\app\Database\Migrations\2023-12-27-144648_UserSesi.php(38): CodeIgniter\Database\Forge->dropTable('userSesi')
+#5 D:\laragon\www\sekolah\system\Database\MigrationRunner.php(873): App\Database\Migrations\UserSesi->down()
+#6 D:\laragon\www\sekolah\system\Database\MigrationRunner.php(295): CodeIgniter\Database\MigrationRunner->migrate('down', Object(stdClass))
+#7 D:\laragon\www\sekolah\system\Commands\Database\MigrateRollback.php(86): CodeIgniter\Database\MigrationRunner->regress(0)
+#8 D:\laragon\www\sekolah\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\MigrateRollback->run(Array)
+#9 D:\laragon\www\sekolah\system\CLI\BaseCommand.php(115): CodeIgniter\CLI\Commands->run('migrate:rollbac...', Array)
+#10 D:\laragon\www\sekolah\system\Commands\Database\MigrateRefresh.php(84): CodeIgniter\CLI\BaseCommand->call('migrate:rollbac...', Array)
+#11 D:\laragon\www\sekolah\system\CLI\Commands.php(65): CodeIgniter\Commands\Database\MigrateRefresh->run(Array)
+#12 D:\laragon\www\sekolah\system\CLI\Console.php(46): CodeIgniter\CLI\Commands->run('migrate:refresh', Array)
+#13 D:\laragon\www\sekolah\spark(102): CodeIgniter\CLI\Console->run()
+#14 {main}

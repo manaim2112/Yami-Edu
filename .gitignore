@@ -1,0 +1,6 @@
+./node_modules
+./tests
+./resources
+.env
+./writable
+./app/Database
