@@ -1,6 +1,9 @@
-./node_modules
-./tests
-./resources
+node_modules
+tests
+resources
 .env
-./writable
-./app/Database
+writable
+app/Database
+
+./package-lock.json
+composer.json
