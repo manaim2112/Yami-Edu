@@ -5,5 +5,5 @@ resources
 writable
 app/Database
 
-./package-lock.json
+package-lock.json
 composer.json
