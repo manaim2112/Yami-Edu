@@ -3,14 +3,15 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Sesi;
 use CodeIgniter\HTTP\RedirectResponse;
 use Config\Database;
-use CurlHandle;
 
-class Install extends BaseController
+class Setup extends BaseController
 {
     protected $forge;
     protected $db;
+    protected $errors = array();
 
     public function __construct()
     {
@@ -21,38 +22,37 @@ class Install extends BaseController
     {
         // $dbutil = \Config\Database::utils();
 
-        $p = ["repair", "install", "update", "setup"];
-        if(!in_array($slug, $p)) {
-            return view("errors/404");
-        }
         if($this->request->is("post") && $this->request->isAJAX()) {
-            switch(isset($slug)) {
-                case 'install' :
-                    $this->up();
-                break;
-                case 'setup' :
-                    $this->sesi_first();
-                    $this->edu_first();
-                break;
-                case 'repair' :
-                    $this->up(true);
-                    $this->up();
-                break;
-                case 'update' :
-                break;
+            if($slug == 'install') {
+                $this->up(false);
+            } else if($slug == 'first') {
+                if(!$this->sesi_first()) return json_encode([
+                    "status" => "error",
+                    "message" => "sesi yang terbaru sudah terbuat"
+                ]);
+                if(!$this->edu_first()) return json_encode([
+                    "status" => "error",
+                    "message" => "akun admin sudah terbuat"
+                ]);
+            } else if($slug == 'repair') {
+                $this->up(true);
+                $this->up(false);
+            } else if($slug == 'update') {
+                
             }
+
             return json_encode([
                 "status" => "success"
-            ]);
+            ]);            
         }
         $data = array();
         $data['mysql_version'] = $this->db->getVersion();
         
         
-        return view("install/" . ($slug ?? 'home'), $data);
+        return view("setup/" . ($slug ?? 'home'), $data);
     }
 
-    public function up($drop = null) : String {
+    public function up($drop = false) : String {
         try {
             $this->admin($drop);
             $this->user($drop);
@@ -76,53 +76,48 @@ class Install extends BaseController
         
     }
 
-    private function sesi_first() {
-        $t = $this->db->table("sesi")->insert([
-            "name" => date('Y') . "/" . date('Y')+1
-        ], true);
-        if(!$t) return false;
-        $this->db->table("sesi_sub")->insert([
+    private function sesi_first() : bool {
+        $sesi = new Sesi();
+        $checkCount = $sesi->selectCount('id', 'count')->where("name", date('Y') . "/" . date('Y')+1)->get()
+        ->getRow();
+        if($checkCount->count < 1) {
+            $sesi->save(["name" => date('Y') . "/" . date('Y')+1, "created_at" => date('Y-m-d H:i:s')]);
+        }
+
+        $this->db->table("sesi_sub")->ignore(true)->insertBatch([
             [ "name" => "semester 1" ],
             [ "name" => "semester 2" ],
         ]);
-        $this->db->table("setting")->insert([
-            [ "name" => "sesi", "content" => 1],
-            [ "name" => "sesi_sub", "content" => 1],
-            [ "name" => "brand_name", "content" => "Yami Edu"],
-            [ "name" => "brand_logo", "content" => false],
-            [ "name" => "kementrian", "content" => "kemendikbud"],
+        $this->db->table("setting")->ignore(true)->insertBatch([
+            [ "name" => "installed", "v" => "yes"],
+            [ "name" => "sesi", "v" => "1"],
+            [ "name" => "sesi_sub", "v" => "1"],
+            [ "name" => "brand_name", "v" => "Yami Edu"],
+            [ "name" => "brand_logo", "v" => null],
+            [ "name" => "kementrian", "v" => "kemendikbud"],
         ]);
 
         return true;
     }
 
-    public function edu_first() {
-        $rules = [
-            "name" => "required",
-            "email" => "required",
-            "password" => "required",
-        ];
-        if(!$this->validate($rules)) {
-            return json_encode([
-                "status" => "error",
-                "message" => "Invalid Name or Password",
-            ]);
-        }
-        $valid = $this->validator->getValidated();
-
-        $db = db_connect();
-        if(!$db->tableExists('edu')) return false;
-        $edu = $db->table("edu");
+    public function edu_first() : bool {
+        $edu = $this->db->table("edu")->ignore(true);
         if($edu->countAll() > 0) return false;
-        $edu->insert([
-            'username' => $valid['name'],
-            'email' => $valid['email'],
-            'password' => password_hash($valid['password'], PASSWORD_ARGON2I),
+        if($edu->insert([
+            'username' => 'admin',
+            'alias' => "Administrator",
+            'email' => 'admin@mail.com',
+            'password' => password_hash('12345', PASSWORD_ARGON2I),
             'role' => 1,
-        ]);
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ])) {
+            return true;
+        }
 
+        return false;
     }
-    private function page($drop = null) {
+    private function page($drop = false) {
         if($drop) {
             $this->forge->dropTable('page', true);
             return;
@@ -141,14 +136,14 @@ class Install extends BaseController
         $this->forge->createTable('page', true);
     }
 
-    private function setting($drop = null) {
+    private function setting($drop = false) {
         if($drop) {
             $this->forge->dropTable('setting', true);
             return;
         }
         $this->forge->addField([
             "id" => [ "type" => "INT", 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true],
-            "name" => [ "type" => "VARCHAR"],
+            "name" => [ "type" => "VARCHAR", 'constraint' => 225],
             "v" => [ "type" => "TEXT" ],
             "created_at" => [ "type" => "datetime" ],
             "updated_at" => [ "type" => "datetime"],
@@ -159,7 +154,7 @@ class Install extends BaseController
         $this->forge->createTable("setting", true);
     }
 
-    private function user($drop = null) {
+    private function user($drop = false) {
         if($drop) {
             $this->forge->dropTable('user', true);
             $this->forge->dropTable('user_biodata', true);
@@ -234,7 +229,7 @@ class Install extends BaseController
         $this->forge->createTable('user_sesi', true);
     }
 
-    private function sesi($drop = null) {
+    private function sesi($drop = false) {
         if($drop) {
             $this->forge->dropTable('sesi', true);
             $this->forge->dropTable('sesi_sub', true);
@@ -260,12 +255,13 @@ class Install extends BaseController
         $this->forge->createTable('sesi_sub', true);
     }
 
-    private function admin($drop = null) {
+    private function admin($drop = false) {
         if($drop) {
             $this->forge->dropTable('edu', true);
             $this->forge->dropTable('edu_biodata', true);
             return;
         }
+
         $this->forge->addField([
             'id' => [ 'type' => 'INT', 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true,],
             'username' => [ 'type' => 'VARCHAR', 'constraint' => '100',],
@@ -299,9 +295,12 @@ class Install extends BaseController
         $this->forge->addUniqueKey("tmt_sk");
         $this->forge->addUniqueKey("ijazah_id");
         $this->forge->createTable('edu_biodata', true);
+
+
+
     }
 
-    private function events($drop = null) {
+    private function events($drop = false) {
         if($drop) {
             $this->forge->dropTable('event', true);
             return;
@@ -324,7 +323,7 @@ class Install extends BaseController
         $this->forge->createTable('event', true);
     }
 
-    private function cbt($drop = null) {
+    private function cbt($drop = false) {
         if($drop) {
             $this->forge->dropTable('cbt', true);
             $this->forge->dropTable('cbt_room', true);
@@ -383,7 +382,7 @@ class Install extends BaseController
             'exam_id' => ['type' => 'INT', 'constraint' => 11],
             'user_id' => ['type' => 'INT', 'constraint' => 11],
             'answer' => ['type' => 'TEXT'],
-            'status' => ['type' => 'VARCHAR'],
+            'status' => ['type' => 'VARCHAR', 'constraint' => 100],
             'created_at' => ['type' => 'DATETIME', 'null' => true],
             'updated_at' => ['type' => 'DATETIME', 'null' => true]
         ]);

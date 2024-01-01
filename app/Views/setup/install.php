@@ -41,6 +41,11 @@
                     <span>Setting Up ...</span>
                 </li>
             </ul>
+            <div class="text-xs mt-2 hidden" id="account">
+                <p class="mb-3"> Akun Admin Default, segera rubah sandi anda ke yang lebih kuat </p>
+                <span class="bg-gray-200 rounded-lg px-2 py-1 text-gray-700 me-3"> username : admin </span>
+                <span class="bg-gray-200 rounded-lg px-2 py-1 text-gray-700"> sandi : 12345 </span>
+            </div>
             <div class="text-red-500 mt-5 text-sm">
                 *Di himbau tidak meninggalkan halaman ini sebelum proses install selesai
             </div>
@@ -68,7 +73,7 @@
                     <span>Berhasil Install</span>
                 `;
                 document.getElementById('setup').classList.remove('hidden');
-                const setup = await fetch("<?= url_to("install.index", "setup") ?>", {
+                const setup = await fetch("<?= url_to("install.index", "first") ?>", {
                     "method" : "POST",
                     "headers" : {
                         "Content-Type": "application/json",
@@ -81,14 +86,15 @@
                         <svg class="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
                         </svg>
-                        <span>Berhasil Install</span>
+                        <span>Berhasil Setting Up</span>
                     `;
+                    document.getElementById('account').classList.remove('hidden');
                 } else {
-                    document.getElementById('proses').innerHTML = `
+                    document.getElementById('setup').innerHTML = `
                         <span class="text-red-500 dark:text-red-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
                             GAGAL
                         </span>
-                        <span>Terjadi Kegagalan saat Setting Up aplikasi</span>
+                        <span>${responseSetup.message}</span>
                     `;
                 }
             } else {

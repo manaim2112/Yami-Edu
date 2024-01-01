@@ -9,8 +9,12 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class Home extends BaseController
 {
-    public function index(): string
+    public function index(): string | RedirectResponse
     {
+        $set = new \App\Models\Setting();
+        $checking = $set->where("name", "installed", true)->get()->getFirstRow();
+        if(!$checking) return redirect()->to(url_to("install"));
+        if($checking->v !== 'yes') return redirect()->to(url_to("install"));
         return view('welcome', [
             "title" => lang("Validation.title.home") . " SSR"
         ]);

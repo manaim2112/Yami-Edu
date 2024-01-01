@@ -11,7 +11,7 @@
 <div class="linier-animate p-3 text-center font-bold text-white">
     What In new Version 
 </div>
-<nav class="bg-white sticky top-0 border-gray-200 dark:border-gray-600 dark:bg-gray-900">
+<nav class="bg-white sticky top-0 z-50 border-gray-200 dark:border-gray-600 dark:bg-gray-900">
     <div class="flex flex-wrap  justify-between items-center mx-auto max-w-screen-lg p-4">
         <a href="https://flowbite.com" class="flex items-center space-x-3 rtl:space-x-reverse">
             <?php

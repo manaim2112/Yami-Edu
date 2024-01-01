@@ -20,9 +20,8 @@ $routes->get('/', 'Home::index', ['as' => 'home']);
 $routes->get("/p/(:page)", "Home::page/$1", ['as' => 'page']);
 $routes->get("/blog/(:segment)?", "Home::blog/$1", ['as' => 'blog']);
 
-$routes->get("/configuration", "Install::index", ['as' => 'install']);
-
-$routes->match(['get', 'post'], "/configuration/(:segment)?", "Install::index/$1", ['as' => 'install.index']);
+$routes->get("/setup", "Setup::index", ['as' => 'install']);
+$routes->match(['get', 'post'], "/setup/(:segment)?", "Setup::index/$1", ['as' => 'install.index']);
 
 
 /**
@@ -79,10 +78,10 @@ $routes->match(['get', 'post'], '/a/auth/(:segment)?', "Admin::auth/$1", ['as' =
 //         //throw $th;
 //     }
 // }, ['as' => 'auto.session', 'filter' => \App\Filters\Admin::class]);
-$routes->set404Override(function() {
-    cache()->save("view", view("errors/404"));
-    return view("errors/404", [], ['cache' => false]);
-});
+// $routes->set404Override(function() {
+//     cache()->save("view", view("errors/404"));
+//     return view("errors/404", [], ['cache' => false]);
+// });
 
 
 

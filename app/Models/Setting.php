@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class Setting extends Model
 {
-    protected $table            = 'settings';
+    protected $table            = 'setting';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['name', 'v'];
 
     // Dates
     protected $useTimestamps = false;
