@@ -4,15 +4,13 @@
 
 <?php
 
-use CodeIgniter\HTTP\URI;
-
  if($subpage === 'create') : ?>
     <?php 
         $db = db_connect();
         $listadmin = $db->table("admin")->select("id, username")->get()->getResult();
         $listsession = $db->table("session")->select()->get()->getResult();
     ?>
-    <h2 class="text-3xl">Buat kegiatan</h2>
+    <h2 class="text-3xl dark:text-gray-100">Buat kegiatan</h2>
     <div class="mb-3">
         Pastikan buat kegiatan tidak asal-asal, karena tidak bisa di hapus
     </div>
@@ -58,13 +56,25 @@ use CodeIgniter\HTTP\URI;
     </select>
     </div>
     <div class="mb-5">
-        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sesi Tahun</label>
-        <select id="countries" name="sesi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <?php foreach($listsession as $la) : ?>
-                <option value="<?= $la->id ?>"><?= $la->name ?></option>
-            <?php endforeach; ?>
-        </select>
-            <a href="<?= url_to("auto.session") ?>" class="text-blue-500 hover:underline hover:text-blue-600">Check update Sesi</a>
+        <div class=" grid grid-cols-2 gap-4">
+            <div>
+                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tahun Pelajaran</label>
+                <select id="countries" name="sesi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <?php foreach($listsession as $la) : ?>
+                        <option value="<?= $la->id ?>"><?= $la->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div>
+                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
+                <select id="countries" name="sesi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <?php foreach($listsession as $la) : ?>
+                        <option value="<?= $la->id ?>"><?= $la->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <a href="<?= url_to("auto.session") ?>" class="text-blue-500 hover:underline hover:text-blue-600">Check update Sesi</a>
     </div>
     <div class="mb-5">
         <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ketua Pelaksana</label>

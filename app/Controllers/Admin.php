@@ -83,7 +83,7 @@ class Admin extends BaseController
         }
         $this->cachePage(60);
 
-        return view("admin/page/" . $page, ['data' => $data ?? [], 'subpage' => $subpage]);
+        return view("admin/page/" . $page, ['data' => $data ?? [], 'subpage' => $subpage], ['cache' => false]);
     }
 
     public function post(String $username = null, String $page = null, String $subpage = null) : String|RedirectResponse|null

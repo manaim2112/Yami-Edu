@@ -7,7 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?= csrf_meta() ?>
     <link rel="shortcut icon" type="image/png" href="/favicon.ico">
-    <link rel="stylesheet" href="/resources/style.css" {csp-style-nonce}>
+    <!-- <link rel="stylesheet" href="/resources/style.css" {csp-style-nonce}> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode : 'class',
+            theme: {
+                extend: {
+                colors: {
+                    clifford: '#da373d',
+                }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/resources/flowbite.min.css" {csp-style-nonce}>
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css"  rel="stylesheet" /> -->
     <style type="text/css">
         .linier-animate {
@@ -41,14 +55,7 @@
     <?= $this->renderSection('body') ?>
 
     <script type="module" src="/resources/flowbite.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script> -->
-    <script>
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark')
-    }
-</script>
+    <script src="/resources/main.js"></script>
+    
 </body>
 </html>

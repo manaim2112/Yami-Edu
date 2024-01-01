@@ -142,7 +142,7 @@ $sidebar = [
 
          <?php foreach($sidebar as $a) : ?>
          <li>
-            <a href="<?= url_to('admin', $auth->name) . $a['path'] ?>" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group <?= ('/' . $uri->getSegment(4) == $a['path']) ? 'bg-gray-100' : '' ?> ">
+            <a href="<?= url_to('admin', $auth->name) . $a['path'] ?>" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100  dark:hover:bg-gray-700 group <?= ('/' . $uri->getSegment(4) == $a['path']) ? 'bg-gray-100 dark:bg-gray-700' : '' ?> ">
                <?= $a['icon'] ?>
                <span class="flex-1 ms-3 whitespace-nowrap"><?= $a['title'] ?></span>
                <?php if(isset($a['notif'])) : ?>
@@ -166,7 +166,7 @@ $sidebar = [
 </aside>
 
 <div class="p-4 sm:ml-64">
-   <div class="p-4 mt-14">
+   <div class="p-4 mt-14 dark:text-gray-100">
 
 
       <?= $this->renderSection('content') ?>
