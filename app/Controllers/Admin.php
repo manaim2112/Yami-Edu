@@ -214,15 +214,15 @@ class Admin extends BaseController
                     // $user = $db->table("user");
                     $k = $this->request->getGet("kelas");
                     $user = new User();
-                    $user->select('user.id, user_biodata.fullname, user_kelas.name, user_sesi.jabat');
+                    $user->select('user.id as id, user_biodata.fullname as fullname, user_kelas.name as kelas, user_sesi.jabat as jabat');
                     $user->join('user_sesi', 'user_sesi.user_id = user.id', 'left');
                     $user->join('user_biodata', 'user_biodata.user_id = user.id', 'left');
-                    $user->join('user_kelas', 'user_kelas.id = user_sesi.kelas', 'left');
-                    if($k === 'none') {
-                        $user->where('user_sesi.kelas', '=', NULL);
-                    } else {
-                        $user->where('user_kelas.name', '=', esc($k));
-                    }
+                    $user->join('user_kelas', 'user_kelas.name = user_sesi.kelas', 'left');
+                    // if($k === 'none') {
+                    //     $user->where('user_sesi.kelas', '=', NULL);
+                    // } elseif($k) {
+                    //     $user->where('user_kelas.name', '=', esc($k));
+                    // }
                     $data['user'] = $user->findAll();
                     $data['kelas'] = $kelas;
                 }
@@ -268,6 +268,44 @@ class Admin extends BaseController
                             ]);
 
                         return redirect()->back()->withCookies()->with("success", "Berhasil menambahkan kelas");
+                    } elseif($subpage == 'upload') {
+                        $rules = [
+                            "kelas" => "required",
+                            "nisn" => "required",
+                            "nis" => "required",
+                            "fullname" => "required",
+                            "password" => "required",
+                        ];
+                        if(!$this->validate($rules)) return json_encode(["status" => "errors", "message" => json_encode(validation_errors())]);
+                        $valid = $this->request->getJsonVar();
+
+                        $user = new User();
+                        $id = $user->insert([
+                            "username" => $valid->nisn,
+                            "alias" => $valid->fullname,
+                            "email" => $valid->nisn . '@mail.com',
+                            "password" => password_hash($valid->password ?? '12345', PASSWORD_DEFAULT)
+                        ], true);
+
+                        if(!$id) return json_encode(["status" => "errors", "message" => "Data Ganda"]);
+
+                        $db->table('user_biodata')->ignore(true)->insert([
+                            "user_id" => $id,
+                            "nis" => $valid->nis,
+                            "nisn" => $valid->nisn,
+                            "fullname" => $valid->fullname,
+                            "tgl_lahir" => $valid->date_birth ?? "",
+                            "tmpt_lahir" => $valid->city_born ?? "",
+                            "address" => esc($valid->address ?? ""),
+                        ]);
+                        $db->table('user_sesi')->ignore(true)->insert([
+                            "user_id" => $id,
+                            "sesi" => cache("setting")->sesi_id,
+                            "kelas" => $valid->kelas,
+                        ]);
+
+                        return json_encode(["status" => "success"]);
+
                     }
                 }
             break;
