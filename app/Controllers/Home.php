@@ -15,8 +15,20 @@ class Home extends BaseController
         $checking = $set->where("name", "installed", true)->get()->getFirstRow();
         if(!$checking) return redirect()->to(url_to("install"));
         if($checking->v !== 'yes') return redirect()->to(url_to("install"));
+
+        $db = db_connect();
+        $d = $db->table("setting")->where("name", "brand_name")
+            ->orWhere("name", "brand_logo")
+            ->orWhere("name", "navigation")
+            ->get()
+            ->getResultObject();
+        $newNav = array();
+        foreach ($d as $value) {
+            $newNav[$value->name] = $value->v;
+        }
         return view('welcome', [
-            "title" => lang("Validation.title.home") . " SSR"
+            "title" => lang("Validation.title.home") . " SSR",
+            "navigation" => $newNav
         ]);
     }
 

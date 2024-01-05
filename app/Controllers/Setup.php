@@ -81,7 +81,7 @@ class Setup extends BaseController
         $checkCount = $sesi->selectCount('id', 'count')->where("name", date('Y') . "/" . date('Y')+1)->get()
         ->getRow();
         if($checkCount->count < 1) {
-            $sesi->save(["name" => date('Y') . "/" . date('Y')+1, "created_at" => date('Y-m-d H:i:s')]);
+            $sesi->insert(["name" => date('Y') . "/" . date('Y')+1, "created_at" => date('Y-m-d H:i:s')], true);
         }
 
         $this->db->table("sesi_sub")->ignore(true)->insertBatch([
@@ -90,7 +90,7 @@ class Setup extends BaseController
         ]);
         $this->db->table("setting")->ignore(true)->insertBatch([
             [ "name" => "installed", "v" => "yes"],
-            [ "name" => "sesi", "v" => "1"],
+            [ "name" => "sesi", "v" => date('Y') . "/" . date('Y')+1],
             [ "name" => "sesi_sub", "v" => "1"],
             [ "name" => "brand_name", "v" => "Yami Edu"],
             [ "name" => "brand_logo", "v" => null],
@@ -144,9 +144,7 @@ class Setup extends BaseController
         $this->forge->addField([
             "id" => [ "type" => "INT", 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true],
             "name" => [ "type" => "VARCHAR", 'constraint' => 225],
-            "v" => [ "type" => "TEXT" ],
-            "created_at" => [ "type" => "datetime" ],
-            "updated_at" => [ "type" => "datetime"],
+            "v" => [ "type" => "TEXT" ]
         ]);
 
         $this->forge->addPrimaryKey("id");
@@ -166,6 +164,7 @@ class Setup extends BaseController
         $this->forge->addField([
             'id' => [ 'type' => 'INT', 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true ],
             'username' => [ 'type' => 'VARCHAR', 'constraint' => '100' ],
+            'alias' => ['type' => 'VARCHAR', 'constraint' => 255],
             'email' => [ 'type' => 'VARCHAR', 'constraint' => '255' ],
             'password' => [ 'type' => 'VARCHAR', 'constraint' => '255' ],
             'created_at' => [ 'type' => 'DATETIME', 'null' => true ],
@@ -221,7 +220,7 @@ class Setup extends BaseController
         $this->forge->addField([
             'id' => [ 'type' => 'INT', 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true ],
             'user_id' => [ 'type' => 'INT' ],
-            'session_id' => [ 'type' => 'INT' ],
+            'sesi' => [ 'type' => 'VARCHAR', 'constraint' => 50 ],
             'kelas' => [ 'type' => 'VARCHAR', 'constraint' => '150' ],
             'jabat' => [ 'type' => 'VARCHAR', 'constraint' => '150' ]
         ]);

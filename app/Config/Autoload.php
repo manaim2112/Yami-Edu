@@ -3,6 +3,8 @@
 namespace Config;
 
 use CodeIgniter\Config\AutoloadConfig;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * -------------------------------------------------------------------
@@ -47,6 +49,8 @@ class Autoload extends AutoloadConfig
     public $psr4 = [
         APP_NAMESPACE => APPPATH, // For custom app namespace
         'Config'      => APPPATH . 'Config',
+        // "PhpOffice" => APPPATH . "ThirdParty",
+
     ];
 
     /**
@@ -61,12 +65,13 @@ class Autoload extends AutoloadConfig
      *
      * Prototype:
      *   $classmap = [
-     *       'MyClass'   => '/path/to/class/file.php'
+     *       'PHPExcel'   => '/Plugins/PHPExcel.php',
      *   ];
      *
      * @var array<string, string>
      */
-    public $classmap = [];
+    public $classmap = [
+    ];
 
     /**
      * -------------------------------------------------------------------
@@ -99,4 +104,24 @@ class Autoload extends AutoloadConfig
      * @phpstan-var list<string>
      */
     public $helpers = [];
+
+    // public function __construct() {
+    //     $phpSpreadsheetPath = APPPATH . 'ThirdParty/PhpSpreadsheet';
+
+    //     $classmapSpreadsheet = [];
+    //     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($phpSpreadsheetPath));
+
+    //     foreach ($iterator as $file) {
+    //         if ($file->isDir()) {
+    //             continue;
+    //         }
+
+    //         $filePath = $file->getPathname();
+    //         $className = 'PhpOffice\\PhpSpreadsheet\\' . pathinfo($filePath, PATHINFO_FILENAME);
+    //         $classmapSpreadsheet[$className] = $filePath;
+    //     }
+
+    //     $this->classmap = array_merge($this->classmap, $classmapSpreadsheet);
+    // }
 }
+

@@ -58,6 +58,7 @@
                                   <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                                       Don’t have an account yet? <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign up</a>
                                   </p>
+                                  <p class="dark:text-gray-50"> Apa anda seorang pegawai ? <a href="<?= url_to("admin.auth", "login") ?>" class="text-blue-600 font-bold"> Masuk sini</a></p>
                               </form>
                               
                               <?php else : ?>

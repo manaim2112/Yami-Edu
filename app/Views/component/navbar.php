@@ -15,13 +15,13 @@
     <div class="flex flex-wrap  justify-between items-center mx-auto max-w-screen-lg p-4">
         <a href="https://flowbite.com" class="flex items-center space-x-3 rtl:space-x-reverse">
             <?php
-                if(isset($head_brand_img)) :
+                if(isset($navigation['brand_logo'])) :
             ?>
                 <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
 
             <?php endif; ?>
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                <?= isset($head_logo_title) ? $head_logo_title : "SSR" ?>
+            <span class="self-center text-2xl font-bold whitespace-nowrap dark:text-white">
+                <?= isset($navigation['brand_name']) ? $navigation['brand_name'] : "SSR" ?>
             </span>
         </a>
 
@@ -67,7 +67,7 @@
         <?php else : ?>
 
             <div class="flex items-center gap-3 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                <a href="">Login</a>
+                <a href="<?= url_to("user.auth", 'login') ?>" class=" hover:bg-gray-300 bg-gray-200 dark:bg-gray-700 hover:dark:bg-gray-800 rounded-full px-3 py-1 dark:text-white">Masuk</a>
                 <label class="relative inline-flex items-center me-5 cursor-pointer">
                     <input type="checkbox" id="theme-toggle"  value="" class="sr-only peer">
                     <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-400"></div>
