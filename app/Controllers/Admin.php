@@ -14,7 +14,7 @@ use App\Libraries\SimpleXLSXGen;
 
 class Admin extends BaseController
 {
-    protected $pathname = ['users', 'teams', 'cbt', 'raport', 'settings', 'setting_site', 'history', 'value', 'events'];
+    protected $pathname = ['users', 'pegawai', 'teams', 'cbt', 'raport', 'settings', 'setting_site', 'history', 'value', 'events'];
     protected $SUBPAGE = ['create', 'edit', 'delete'];
     protected $helpers = ['form'];
 
@@ -84,6 +84,7 @@ class Admin extends BaseController
 
                 } else {
                     $data = new Activity();
+                    $data = $data->where("sesi_id", $setting->sesi_id)->findAll();
                     
                 }
             break;
@@ -218,11 +219,11 @@ class Admin extends BaseController
                     $user->join('user_sesi', 'user_sesi.user_id = user.id', 'left');
                     $user->join('user_biodata', 'user_biodata.user_id = user.id', 'left');
                     $user->join('user_kelas', 'user_kelas.name = user_sesi.kelas', 'left');
-                    // if($k === 'none') {
-                    //     $user->where('user_sesi.kelas', '=', NULL);
-                    // } elseif($k) {
-                    //     $user->where('user_kelas.name', '=', esc($k));
-                    // }
+                    if($k === 'none') {
+                        $user->where('user_sesi.kelas', NULL);
+                    } elseif($k !== NULL) {
+                        $user->where('user_kelas.name', $k);
+                    }
                     $data['user'] = $user->findAll();
                     $data['kelas'] = $kelas;
                 }

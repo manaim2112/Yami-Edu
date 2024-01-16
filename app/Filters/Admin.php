@@ -3,6 +3,7 @@
 namespace App\Filters;
 
 use CodeIgniter\Filters\FilterInterface;
+use CodeIgniter\HTTP\Exceptions\RedirectException;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use stdClass;
@@ -50,21 +51,15 @@ class Admin implements FilterInterface
 
     public function before(RequestInterface $request, $arguments = null)
     {
-        $session = session();
-        $auth = $session->get("admin_isLoggedIn");
-        if(!$auth) return redirect()->to(url_to('admin.auth', 'login'));
 
-        if(isset($json)) return redirect()->to(url_to('admin.auth', 'login'));
-        $admin = new \stdClass();
-        $admin->name = $session->get('admin_username');
-        $admin->full = $session->get('admin_fullname');
-        $admin->role = $session->get('admin_role');
-        $admin->id = $session->get('admin_id');
-        $admin->email = $session->get('admin_email');
-        $admin->access = in_array($admin->role, [1,2,3]) ? true : false;
-        $admin->access = in_array($admin->role, [5]) ? null : $admin->access;
-        $admin->access = in_array($admin->role, [4]) ? false : $admin->access; 
-        $request->admin = $admin;
+        $uri = service("uri");
+        $auth = auth('edu');
+        if(!$auth->has()) return redirect()->to(url_to('admin.auth', 'login'));
+        if(!$uri->getSegment(3)) return redirect()->to(url_to('edu.index', $auth->username));
+        if($uri->getSegment(3) !== $auth->username) return redirect()->to(url_to("edu", $auth->username));
+        
+        if(!$auth->isLoggedIn) return redirect()->to(url_to('admin.auth', 'login'));
+
         return $request;
     }
 

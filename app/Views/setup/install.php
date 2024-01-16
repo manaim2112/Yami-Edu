@@ -80,6 +80,7 @@
                         "X-Requested-With": "XMLHttpRequest"
                     }
                 });
+                console.log(await setup.text);
                 const responseSetup = await setup.json();
                 if(responseSetup.status === "success") {
                     document.getElementById('setup').innerHTML = `

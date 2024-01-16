@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class Activity extends Model
 {
-    protected $table            = 'activities';
+    protected $table            = 'event';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['session_id', 'admin_id', 'admin_name', 'name', 'jenis', 'status'];
+    protected $allowedFields    = ['sesi_id', 'edu_id', 'name', 'jenis', 'status', 'start_date', 'end_date'];
 
     // Dates
     protected $useTimestamps = true;

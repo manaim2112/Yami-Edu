@@ -89,7 +89,9 @@ class Autoload extends AutoloadConfig
      * @var string[]
      * @phpstan-var list<string>
      */
-    public $files = [];
+    public $files = [
+        APPPATH . 'Libraries/common.php'
+    ];
 
     /**
      * -------------------------------------------------------------------
