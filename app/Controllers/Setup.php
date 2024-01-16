@@ -297,6 +297,17 @@ class Setup extends BaseController
         $this->forge->addKey('id', true);
         $this->forge->createTable('user_kelas', true);
 
+        // Data kelas (akan ditambah tiap tahun)
+        $this->forge->addField([
+            'id' => [ 'type' => 'INT', 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true, ],
+            'edu_id' => [ 'type' => 'INT', 'constraint' => 5, 'unsigned' => true ],
+            'kelas_id' => [ 'type' => 'INT','constraint' => '5', 'unsigned' => true ],
+            'sesi_id' => [ 'type' => 'INT', 'constraint' => 5, 'unsigned' => true ],
+        ]);
+        $this->forge->addKey("id", true);
+        $this->forge->addKey("sesi_id");
+        $this->forge->createTable("data_kelas", true);
+        
         // Sesi (akan ditambah tiap tahun)
         $this->forge->addField([
             'id' => [ 'type' => 'INT', 'constraint' => 5, 'unsigned' => true, 'auto_increment' => true ],

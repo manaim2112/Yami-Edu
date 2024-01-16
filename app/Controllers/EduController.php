@@ -89,7 +89,7 @@ class EduController extends BaseController
             if(sizeof($checkKelasIfExist) < 1) return redirect()->back()->withCookies()->with("errors", "Anda Belum Menambahkan kelas di tahun ini");
             $ss = new SimpleXLSXGen();
             foreach($checkKelasIfExist as $k) {
-                $data = [ [""], ['<b><style border="#000000" bgcolor="#ffff00"><center><middle> KELAS</middle></center> </style></b>', '<style border="#000000" bgcolor="#ffff00"></style>', '<style border="#000000" bgcolor="#ffff00"></style>', '<b><style border="#00000" height="20" bgcolor="#f8f8f8">' . $k->name . '</style></b>'], [""] ];
+                $data = [ [""], ['<b><style border="#000000" bgcolor="#ffff00"><center><middle> KODE</middle></center> </style></b>', '<style border="#000000" bgcolor="#ffff00"></style>', '<style border="#000000" bgcolor="#ffff00"></style>', '<b><style border="#00000" height="20" bgcolor="#f8f8f8">' . $k->kode . '</style></b>'], ['<b><style border="#000000" bgcolor="#ffff00"><center><middle> KELAS</middle></center> </style></b>', '<style border="#000000" bgcolor="#ffff00"></style>', '<style border="#000000" bgcolor="#ffff00"></style>', '<b><style border="#00000" height="20" bgcolor="#f8f8f8">' . $k->name . '</style></b>'], ['<b><style border="#000000" bgcolor="#ffff00"><center><middle> Id Pegawai</middle></center> </style></b>', '<style border="#000000" bgcolor="#ffff00"></style>', '<style border="#000000" bgcolor="#ffff00"></style>', '<b><style border="#00000" height="20" bgcolor="#f8f8f8">' . $k->name . '</style></b>'], [""] ];
                 array_push($data, 
                 [
                     '<b><style border="#000000" height="30" bgcolor="#ffff00"><center><middle> NO</middle></center> </style></b>',
@@ -118,7 +118,10 @@ class EduController extends BaseController
                         '<style border="#000000"><center> </center> </style>',
                     ]);
                 }
-                $ss->addSheet($data, $k->name)->mergeCells("A2:C2")
+                $ss->addSheet($data, $k->name)
+                ->mergeCells("A2:C2")
+                ->mergeCells("A3:C3")
+                ->mergeCells("A4:C4")
                 ->setColWidth(1, 5)
                 ->setColWidth(2, 20)
                 ->setColWidth(3, 20)
